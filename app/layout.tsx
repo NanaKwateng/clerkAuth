@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+//clerk
+import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton, ClerkLoaded, ClerkLoading } from '@clerk/nextjs'
+import { dark } from "@clerk/themes";
+import Navbar from "@/components/Navbar";
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -23,12 +29,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider appearance={{baseTheme: dark}}>
+      <html lang="en">
+        <body 
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {/* If Clerk is still Loading Show this Loader ui */}
+          <ClerkLoading>
+            <div className="flex items-center justify-center h-screen text-2xl">
+              Loading
+            </div>
+          </ClerkLoading>
+
+
+          {/* If Clerk is already loaded show this */}
+          <ClerkLoaded>
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col h-screen">
+              <Navbar />
+              {children}
+            </div>
+          </div>
+          </ClerkLoaded>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
