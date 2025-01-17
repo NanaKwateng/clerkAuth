@@ -1,4 +1,4 @@
-'use server'
+"use server"
 
 import User from "@/app/api/data/models/user.modal";
 import { connect } from "@/db";
